@@ -1116,7 +1116,7 @@ def build(cfg: dict, out_path=None) -> str:
         sheet_pick_assistant(wb, fmts, vona, best, cfg, sim_rows,
                              tracker_last, live_best)
     else:
-        print("  [skip] Pick Assistant - run src/simulate.py first")
+        print("  [skip] Pick Assistant - run fantasydraft/simulate.py first")
     sheet_metrics(wb, fmts, cfg)
     sheet_sources(wb, fmts, cfg)
     wb.close()

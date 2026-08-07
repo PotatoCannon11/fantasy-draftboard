@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Prove src/live.py reproduces the workbook's live engine.
+"""Prove fantasydraft/live.py reproduces the workbook's live engine.
 
 The xlsx stays as the draft-day backup, so the two surfaces must not drift. This
 recalculates the real workbook through LibreOffice and asserts the Python engine
@@ -82,9 +82,6 @@ def main() -> int:
     cfg = load_config()
     board = pd.read_parquet(DATA_PROC / "draft_board.parquet")
     xlsx = latest_board()
-    if xlsx is None:
-        print("no workbook in output/ - run the pipeline first")
-        return 1
 
     # The workbook is built from a filtered board; the engine must see exactly
     # the same universe or the queues differ and nothing will line up.
@@ -155,9 +152,15 @@ def main() -> int:
           all(d["best_tier"] == 1 for d in sc.values()),
           f"{ {p: d['best_tier'] for p, d in sc.items()} }")
 
-    if not soffice:
-        print("\nLibreOffice not found - skipping workbook parity "
-              "(this is not a pass). Set FDS_SOFFICE.")
+    # The unit tests above stand on their own. Parity additionally needs a
+    # built workbook AND LibreOffice; where either is missing (CI, a fresh
+    # checkout) say so loudly and skip rather than failing the suite for the
+    # absence of an optional dependency.
+    if xlsx is None or not soffice:
+        why = "no workbook in output/" if xlsx is None else "LibreOffice not found"
+        print(f"\n[skip] workbook parity - {why}. "
+              "Build one with `python -m fantasydraft.run_pipeline` and set "
+              "FDS_SOFFICE to check the two surfaces still agree.")
         return _report()
 
     print("\n=== parity with the workbook's recalculated engine ===")

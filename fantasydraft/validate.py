@@ -143,7 +143,7 @@ def main() -> int:
         missing = [s for s in required if s not in wb.sheetnames]
         check("all required tabs present", not missing, f"missing {missing}")
         # Pick Assistant only exists once the simulation has been run.
-        check("Pick Assistant present (needs src/simulate.py)",
+        check("Pick Assistant present (needs fantasydraft/simulate.py)",
               "Pick Assistant" in wb.sheetnames,
               "run the simulate stage")
         ws = wb["Master Board"]

@@ -5,7 +5,7 @@ This is a draft-mechanics test, not a projection-accuracy test. Read this before
 trusting the numbers it prints:
 
   * Opponents draft from live FFC ADP with its per-player stdev, using the same
-    roster-aware model `src/simulate.py` uses (starter nudges, positional caps,
+    roster-aware model `fantasydraft/simulate.py` uses (starter nudges, positional caps,
     K/DEF held to the endgame). That part is a fair imitation of a real room.
 
   * YOUR picks in the `workbook` strategy come from the actual xlsx - each round

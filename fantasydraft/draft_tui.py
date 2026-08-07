@@ -2,7 +2,7 @@
 """Keyboard-driven draft dashboard.
 
 Everything here is reachable without the mouse - on the clock you should never
-have to look for a pointer. The engine is `src/live.py`, which `test_live.py`
+have to look for a pointer. The engine is `fantasydraft/live.py`, which `test_live.py`
 holds to parity with the workbook, so the xlsx remains a working backup.
 
     draftboard                       # your configured slot
@@ -726,6 +726,9 @@ class DraftApp(App):
 
     # -- persistence -------------------------------------------------------
     def _save_state(self) -> None:
+        # Losing a draft because a directory was missing is not acceptable, and
+        # the app is reachable without going through main()'s ensure_dirs().
+        STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
         STATE_PATH.write_text(json.dumps({
             "order": [{"name": str(self.board.player_name[p.idx]),
                        "mine": p.mine} for p in self.st.order],

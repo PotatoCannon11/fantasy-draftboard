@@ -6,6 +6,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Deterministic and offline on purpose. The pipeline pulls from a dozen
+# third-party endpoints that owe this project nothing, so re-pulling on every
+# push means the suite goes red for reasons unrelated to the change under test -
+# and a permanently-red suite is worse than none, because people stop reading
+# it. Live sources are checked on a schedule by sources.yml instead.
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,31 +19,40 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -r requirements.txt
 
-      # The dashboard tests need a board to load, so build one first. This also
-      # exercises the whole ingest -> board pipeline against the live sources.
-      # Third-party feeds block datacentre IPs from time to time (FantasySharks
-      # 403s GitHub runners); the ingest degrades over that, and the run only
-      # fails if too few projection sources answer to build an honest blend.
-      - name: Build a board
-        run: python -m fantasydraft.run_pipeline
+      - name: Assemble a data home from the frozen fixture
+        run: |
+          mkdir -p "$RUNNER_TEMP/home/config"
+          cp -r tests/fixtures/data "$RUNNER_TEMP/home/"
+          cp config/*.yaml "$RUNNER_TEMP/home/config/"
+          echo "FANTASY_HOME=$RUNNER_TEMP/home" >> "$GITHUB_ENV"
 
-      - name: Data integrity
-        run: python -m fantasydraft.validate
-
-      - name: Live engine (unit tests; xlsx parity needs LibreOffice, skipped)
-        run: python test_live.py
+      - name: Live engine
+        run: python test_live.py     # parity needs LibreOffice; skips here
 
       - name: Dashboard keyboard paths
         run: python test_tui.py
+
+      # From the board onward the pipeline is pure computation - the Monte
+      # Carlo sim and both renderers touch no network - so CI runs them for
+      # real instead of freezing yet more fixtures.
+      - name: Simulate and build the board
+        run: |
+          python -m fantasydraft.run_pipeline --stage simulate
+          python -m fantasydraft.validate
 
       - name: Wheel builds and installs clean
         run: |
           python -m pip install --upgrade build
           python -m build --wheel
-          python -m venv /tmp/fresh
-          /tmp/fresh/bin/pip install dist/*.whl
-          FANTASY_HOME=/tmp/freshhome /tmp/fresh/bin/draftboard \
+          python -m venv "$RUNNER_TEMP/fresh"
+          "$RUNNER_TEMP/fresh/bin/pip" install --quiet dist/*.whl
+          # A brand-new install has no data and must say so, not traceback.
+          FANTASY_HOME="$RUNNER_TEMP/empty" "$RUNNER_TEMP/fresh/bin/draftboard" \
             | grep -q "No draft board yet"
+          # --help must work with no data at all (this regressed once).
+          FANTASY_HOME="$RUNNER_TEMP/empty" "$RUNNER_TEMP/fresh/bin/draftboard" \
+            --help > /dev/null

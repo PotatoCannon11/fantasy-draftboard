@@ -1,0 +1,120 @@
+{
+  "adp": {
+    "cols": 15,
+    "path": "data/raw/adp.parquet",
+    "pulled_at": "2026-08-07T16:47:01+00:00",
+    "rows": 512,
+    "url": "https://fantasyfootballcalculator.com/api/v1/adp/ppr?teams=8&year=2026&position=all; https://fantasyfootballcalculator.com/api/v1/adp/ppr?teams=10&year=2026&position=all"
+  },
+  "depth_charts": {
+    "cols": 12,
+    "path": "data/raw/depth_charts.parquet",
+    "pulled_at": "2026-08-07T16:14:44+00:00",
+    "rows": 3222,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2026.csv"
+  },
+  "ffopportunity": {
+    "cols": 159,
+    "path": "data/raw/ffopportunity.parquet",
+    "pulled_at": "2026-08-07T16:15:24+00:00",
+    "rows": 18140,
+    "url": "https://github.com/ffverse/ffopportunity/releases/download/latest-data/ep_weekly_2025.csv; https://github.com/ffverse/ffopportunity/releases/download/latest-data/ep_weekly_2024.csv; https://github.com/ffverse/ffopportunity/releases/download/latest-data/ep_weekly_2023.csv"
+  },
+  "id_crosswalk": {
+    "cols": 35,
+    "path": "data/raw/id_crosswalk.parquet",
+    "pulled_at": "2026-08-07T16:14:32+00:00",
+    "rows": 12470,
+    "url": "https://raw.githubusercontent.com/dynastyprocess/data/master/files/db_playerids.csv"
+  },
+  "news_auto": {
+    "path": "data/raw/news_auto.parquet",
+    "pulled_at": "2026-08-07T22:51:34+00:00",
+    "rows": 97,
+    "url": "sleeper-trending + espn-news"
+  },
+  "ngs": {
+    "cols": 52,
+    "path": "data/raw/ngs.parquet",
+    "pulled_at": "2026-08-07T16:15:00+00:00",
+    "rows": 26723,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/nextgen_stats/ngs_receiving.csv.gz; https://github.com/nflverse/nflverse-data/releases/download/nextgen_stats/ngs_rushing.csv.gz; https://github.com/nflverse/nflverse-data/releases/download/nextgen_stats/ngs_passing.csv.gz"
+  },
+  "pbp": {
+    "cols": 19,
+    "path": "data/raw/pbp.parquet",
+    "pulled_at": "2026-08-07T16:15:19+00:00",
+    "rows": 147928,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet; https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.parquet; https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2023.parquet"
+  },
+  "players": {
+    "cols": 39,
+    "path": "data/raw/players.parquet",
+    "pulled_at": "2026-08-07T16:14:31+00:00",
+    "rows": 25038,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/players/players.csv"
+  },
+  "proj_espn": {
+    "cols": 9,
+    "path": "data/raw/proj_espn.parquet",
+    "pulled_at": "2026-08-07T16:47:04+00:00",
+    "rows": 522,
+    "url": "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2026/segments/0/leaguedefaults/3?view=kona_player_info"
+  },
+  "proj_fantasysharks": {
+    "cols": 4,
+    "path": "data/raw/proj_fantasysharks.parquet",
+    "pulled_at": "2026-08-07T16:13:49+00:00",
+    "rows": 615,
+    "url": "https://www.fantasysharks.com/apps/bert/forecasts/projections.php?League=-1&Position=99&scoring=2&Segment=874&uid=4&csv=1"
+  },
+  "proj_sleeper": {
+    "cols": 9,
+    "path": "data/raw/proj_sleeper.parquet",
+    "pulled_at": "2026-08-07T16:47:02+00:00",
+    "rows": 635,
+    "url": "https://api.sleeper.app/projections/nfl/2026?season_type=regular&position[]=QB&order_by=pts_ppr; https://api.sleeper.app/projections/nfl/2026?season_type=regular&position[]=RB&order_by=pts_ppr; https://api.sleeper.app/projections/nfl/2026?season_type=regular&position[]=WR&order_by=pts_ppr; https://api.sleeper.app/projections/nfl/2026?season_type=regular&position[]=TE&order_by=pts_ppr; https://api.sleeper.app/projections/nfl/2026?season_type=regular&position[]=K&order_by=pts_ppr; https://api.sleeper.app/projections/nfl/2026?season_type=regular&position[]=DEF&order_by=pts_ppr"
+  },
+  "rosters": {
+    "cols": 36,
+    "path": "data/raw/rosters.parquet",
+    "pulled_at": "2026-08-07T16:14:33+00:00",
+    "rows": 2930,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_2026.csv"
+  },
+  "schedules": {
+    "cols": 46,
+    "path": "data/raw/schedules.parquet",
+    "pulled_at": "2026-08-07T16:14:54+00:00",
+    "rows": 7548,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv"
+  },
+  "snap_counts": {
+    "cols": 16,
+    "path": "data/raw/snap_counts.parquet",
+    "pulled_at": "2026-08-07T16:15:00+00:00",
+    "rows": 79767,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_2025.csv; https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_2024.csv; https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_2023.csv"
+  },
+  "stats_player_season": {
+    "cols": 143,
+    "path": "data/raw/stats_player_season.parquet",
+    "pulled_at": "2026-08-07T16:14:55+00:00",
+    "rows": 5960,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_reg_2025.csv; https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_reg_2024.csv; https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_reg_2023.csv"
+  },
+  "stats_player_week": {
+    "cols": 145,
+    "path": "data/raw/stats_player_week.parquet",
+    "pulled_at": "2026-08-07T16:14:57+00:00",
+    "rows": 19421,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/stats_player/stats_player_week_2025.csv"
+  },
+  "stats_team": {
+    "cols": 131,
+    "path": "data/raw/stats_team.parquet",
+    "pulled_at": "2026-08-07T16:14:58+00:00",
+    "rows": 96,
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_reg_2025.csv; https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_reg_2024.csv; https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_reg_2023.csv"
+  }
+}
