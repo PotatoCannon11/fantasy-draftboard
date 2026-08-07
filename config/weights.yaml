@@ -1,0 +1,174 @@
+season: 2026
+league:
+  scoring: ppr
+  team_counts:
+  - 8
+  - 10
+  primary_team_count: 10
+  roster:
+    QB: 1
+    RB: 2
+    WR: 2
+    TE: 1
+    FLEX: 1
+    K: 1
+    DEF: 1
+  flex_eligible:
+  - RB
+  - WR
+  - TE
+  bench_slots: 6
+projections:
+  sources:
+    sleeper: 1.0
+    espn: 1.0
+    fantasysharks: 0.8
+  min_sources: 2
+  zscore_within_position: true
+  shrinkage:
+    enabled: true
+    k_base: 0.06
+    k_single_source: 0.18
+context:
+  max_total_swing: 0.2
+  proe:
+    enabled: true
+    pass_catcher_scale: 0.35
+    rusher_scale: -0.2
+  exp_pts_regression:
+    enabled: true
+    scale: 0.06
+    cap: 0.08
+  target_competition:
+    enabled: true
+    scale: 0.05
+  depth_chart:
+    enabled: true
+    rank_multiplier:
+      1: 1.03
+      2: 0.99
+      3: 0.94
+      4: 0.88
+    default: 0.85
+  injury:
+    enabled: true
+    per_game_missed: 0.006
+    max_discount: 0.12
+  age:
+    enabled: true
+    curves:
+      RB:
+        peak_age: 24
+        per_year: 0.05
+        max_discount: 0.3
+      WR:
+        peak_age: 26
+        per_year: 0.03
+        max_discount: 0.22
+      TE:
+        peak_age: 26
+        per_year: 0.03
+        max_discount: 0.18
+      QB:
+        peak_age: 30
+        per_year: 0.025
+        max_discount: 0.15
+      K:
+        peak_age: 36
+        per_year: 0.01
+        max_discount: 0.05
+      DEF:
+        peak_age: 99
+        per_year: 0.0
+        max_discount: 0.0
+  qb_tier:
+    enabled: true
+    multipliers:
+      1: 1.05
+      2: 1.02
+      3: 1.0
+      4: 0.97
+      5: 0.94
+  oline:
+    enabled: true
+    scale: 0.02
+variance:
+  base_cv:
+    QB: 0.22
+    RB: 0.38
+    WR: 0.36
+    TE: 0.38
+    K: 0.22
+    DEF: 0.3
+  widen:
+    unclear_role: 0.06
+    rookie: 0.07
+    new_team: 0.04
+    injury_history: 0.05
+    low_source_agreement: 0.08
+  band_z: 1.0
+vbd:
+  method: adp_demand
+  roster_size: 15
+  streaming_allowance:
+    QB: 0.5
+    RB: 1.5
+    WR: 1.5
+    TE: 0.4
+    K: 0.0
+    DEF: 0.0
+  flex_split:
+    RB: 0.45
+    WR: 0.45
+    TE: 0.1
+  min_rank:
+    QB: 8
+    RB: 16
+    WR: 16
+    TE: 8
+    K: 6
+    DEF: 6
+tiering:
+  method: gap
+  gap_threshold: 0.55
+  rolling_window: 7
+  min_tier_size: 2
+  max_tiers_per_position: 14
+  kmeans_k:
+    QB: 6
+    RB: 9
+    WR: 9
+    TE: 7
+    K: 3
+    DEF: 4
+output:
+  board_depth: 550
+  cheat_sheet_depth: 180
+  adp_teams: 10
+  value_flag_rounds: 1.0
+  positional_run_window: 8
+  useful_max:
+    QB: 2
+    RB: 7
+    WR: 8
+    TE: 2
+    K: 1
+    DEF: 1
+  single_source_rank_grace: 60
+  single_source_keep_if_adp: true
+simulation:
+  draft_slot: 5
+  rounds: 15
+  sims: 20000
+  opponents:
+    model: roster_aware
+    start_bonus: 10
+    flex_bonus: 5
+    kdef_last_rounds: 3
+    caps:
+      QB: 3
+      RB: 7
+      WR: 8
+      TE: 3
+      K: 2
+      DEF: 2

@@ -1,0 +1,91 @@
+updated: 2026-08-07         # set to the date you last refreshed this file
+
+# Camp is ~2 weeks in; HOF game (CAR 33-30 ARI) played 8/6 with starters mostly
+# rested, so it produced no material fantasy signal. Everything below is camp
+# reporting, roster moves, and injury news the projections cannot know yet.
+# Scope: top ~90 by VBD plus players whose ADP is moving.
+
+players:
+
+  # ---------------------------------------------------------------------
+  # Injury designations already auto-flagged on the board - these notes add
+  # the detail the bare IR/PUP tag hides. A manual `flag` overrides the
+  # auto-derived one, so `watch` here deliberately softens a misleading red.
+  # ---------------------------------------------------------------------
+  "Alec Pierce":
+    note: "Ankle surgery; expected off PUP within a week. Downs taking more outside snaps may trim his share."
+    flag: watch
+  "George Kittle":
+    note: "Achilles. Reserve/PUP = 2 wks min, targeting Wk1 but 4-game risk is live. TE is thin - price it in."
+    flag: out
+
+  # ---------------------------------------------------------------------
+  # Risers - new information that moves value ABOVE where the market has them
+  # ---------------------------------------------------------------------
+  "Brian Thomas Jr.":
+    note: "Drops cleaned up, Lawrence rapport back, Coen promising a big downfield role. Market still pricing the 2025 bust."
+    flag: up
+  "Matthew Golden":
+    note: "Doubs (NE) and Wicks (PHI) both gone; GB's top WR job is his. Camp standout."
+    flag: up
+  "Josh Downs":
+    note: "Role expanding to outside + slot, air yards climbing; Pierce on PUP adds early volume."
+    flag: up
+  "Malik Nabers":
+    note: "Practicing fully off the ACL, on track for Wk1."
+    flag: up
+  "Parker Washington":
+    note: "Trusted third-down target, ADP climbing all camp. Shares a pool with BTJ / Meyers / Hunter."
+    flag: up
+  "Jaylen Waddle":
+    note: "Minor leg strain, back next week. Payton raving - locked WR1 in a thin DEN room."
+    flag: up
+  "Omarion Hampton":
+    note: "Confirmed clear RB1 over Mitchell/Vidal; new OC calls him the team's most-improved player."
+    flag: up
+  "Stefon Diggs":
+    note: "Signed WAS 8/5 (1yr, up to $12M). WR2 opposite McLaurin, replacing Deebo. ADP predates the deal."
+    flag: up
+  "Sam LaPorta":
+    note: "Fully cleared from Nov microdiscectomy, full-go day 1, no pain reported. Expect practice load management."
+    flag: up
+  "Jonathon Brooks":
+    note: "Fully cleared, explosive in pads; CAR say he can take RB1 duties from Hubbard."
+    flag: up
+  "Jadarian Price":
+    note: "Charbonnet (ACL) on PUP and out much of the year - backfield is clean from Wk1."
+    flag: up
+  "Tucker Kraft":
+    note: "Off PUP post-ACL with a real shot at Wk1. ADP moving up."
+    flag: watch
+
+  # ---------------------------------------------------------------------
+  # Cautions - new risk the model and/or the market has not priced
+  # ---------------------------------------------------------------------
+  "Xavier Worthy":
+    note: "Sprained (8/1) the same shoulder he had surgery on in Jan. Reid says minor, back this week - the ADP dip looks like a discount."
+    flag: watch
+  "Rashee Rice":
+    note: "Deliberate ramp-up plan, individual drills only early in camp. Steep price for a slow start."
+    flag: watch
+  "Drake London":
+    note: "ATL QB unsettled: Tua (back flare-up, new offense) leading Penix (knee, weeks from 11-on-11). Ceiling risk at a top-12 price."
+    flag: watch
+  "Kyle Pitts":
+    note: "Fully healthy and confident, but the ATL QB battle is unresolved (Tua back, Penix knee)."
+    flag: watch
+  "Jeremiyah Love":
+    note: "LaFleur keeps floating a rotation with Allgeier and Conner. Workhorse share is not locked."
+    flag: watch
+  "Mike Evans":
+    note: "Quad strain in camp, age 33, first year in the SF offense."
+    flag: watch
+  "Deebo Samuel":
+    note: "Signed SF 8/1. Pearsall out for year, Kirk (calf) and Evans (quad) banged up - targets available, but model still has him a reach at ADP 97."
+    flag: watch
+  "Kenneth Walker III":
+    note: "Lead back in KC and confirmed for the majority of carries, but E.Johnson/Demercado take passing downs. PPR ceiling capped - model RB15 vs ADP RB10-11."
+    flag: watch
+  "Chuba Hubbard":
+    note: "Brooks fully cleared and looking explosive; CAR openly calling it an RB1 competition."
+    flag: down

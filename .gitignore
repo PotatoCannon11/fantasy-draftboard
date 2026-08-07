@@ -1,0 +1,21 @@
+# virtualenv / build artefacts
+.venv/
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+
+# pulled datasets and generated boards - rebuilt by `draftboard-pipeline`,
+# far too large and too perishable to version
+data/raw/
+data/processed/
+output/
+
+# local draft state
+output/draft_state.json
+
+# local-only notes and editor/tooling state
+*.local.md
+CLAUDE.md
+.claude/

@@ -1,0 +1,41 @@
+name: test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements.txt
+
+      # The dashboard tests need a board to load, so build one first. This also
+      # exercises the whole ingest -> board pipeline against the live sources.
+      - name: Build a board
+        run: python -m fantasydraft.run_pipeline
+
+      - name: Data integrity
+        run: python -m fantasydraft.validate
+
+      - name: Live engine (unit tests; xlsx parity needs LibreOffice, skipped)
+        run: python test_live.py
+
+      - name: Dashboard keyboard paths
+        run: python test_tui.py
+
+      - name: Wheel builds and installs clean
+        run: |
+          python -m pip install --upgrade build
+          python -m build --wheel
+          python -m venv /tmp/fresh
+          /tmp/fresh/bin/pip install dist/*.whl
+          FANTASY_HOME=/tmp/freshhome /tmp/fresh/bin/draftboard \
+            | grep -q "No draft board yet"

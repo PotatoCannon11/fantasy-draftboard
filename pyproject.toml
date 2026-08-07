@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fantasy-draftboard"
+version = "0.1.0"
+description = "Research-to-draft-board pipeline and a keyboard-driven draft dashboard for PPR redraft leagues"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["fantasy-football", "nfl", "draft", "tui", "vbd"]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Games/Entertainment",
+]
+dependencies = [
+  "pandas>=2.2,<3.0",
+  "numpy>=1.26,<3.0",
+  "scipy>=1.11",
+  "scikit-learn>=1.4",
+  "pyarrow>=15.0",
+  "requests>=2.31",
+  "PyYAML>=6.0",
+  "lxml>=5.0",
+  "html5lib>=1.1",
+  "XlsxWriter>=3.2",
+  "openpyxl>=3.1",
+  "textual>=8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/PotatoCannon11/fantasy-draftboard"
+Issues = "https://github.com/PotatoCannon11/fantasy-draftboard/issues"
+
+[project.scripts]
+draftboard = "fantasydraft.draft_tui:main"
+draftboard-pipeline = "fantasydraft.run_pipeline:main"
+draftboard-news = "fantasydraft.refresh_news:main"
+draftboard-sleeper = "fantasydraft.sleeper_sync:main"
+
+[tool.setuptools]
+# The package directory is `src/`, published under a proper importable name.
+# Its __init__ puts that directory back on sys.path so the modules' flat
+# imports (`from common import ...`) keep working identically whether the code
+# runs from a checkout or from an installed wheel.
+package-dir = { "fantasydraft.config" = "config" }
+packages = ["fantasydraft", "fantasydraft.config"]
+
+[tool.setuptools.package-data]
+"fantasydraft.config" = ["*.yaml"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["__pycache__/*"]

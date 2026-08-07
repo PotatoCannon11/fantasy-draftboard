@@ -1,0 +1,484 @@
+_readme: 'Auto-derived team context. `derived` is regenerated every time features.py
+  runs; `override` is never touched - set a value there to overrule the derived number
+  (e.g. a QB change the 2025 data cannot know about). qb_tier: 1 = best, 5 = worst.'
+teams:
+  ARI:
+    derived:
+      neutral_pass_rate: 0.5817
+      oline_ryoe: -0.5031
+      oline_z: -1.9921
+      proe_z: 1.974
+      qb_epa_per_att: -0.0066
+      qb_tier: 4
+      target_concentration: 0.1486
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  ATL:
+    derived:
+      neutral_pass_rate: 0.4766
+      oline_ryoe: 0.6174
+      oline_z: 0.5889
+      proe_z: -0.291
+      qb_epa_per_att: 0.0186
+      qb_tier: 3
+      target_concentration: 0.1645
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  BAL:
+    derived:
+      neutral_pass_rate: 0.4028
+      oline_ryoe: 1.128
+      oline_z: 1.7651
+      proe_z: -1.88
+      qb_epa_per_att: 0.0601
+      qb_tier: 3
+      target_concentration: 0.1502
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  BUF:
+    derived:
+      neutral_pass_rate: 0.4689
+      oline_ryoe: 1.0947
+      oline_z: 1.6883
+      proe_z: -0.4571
+      qb_epa_per_att: 0.1551
+      qb_tier: 2
+      target_concentration: 0.1049
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  CAR:
+    derived:
+      neutral_pass_rate: 0.4675
+      oline_ryoe: 0.3467
+      oline_z: -0.0346
+      proe_z: -0.4865
+      qb_epa_per_att: -0.046
+      qb_tier: 4
+      target_concentration: 0.1269
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  CHI:
+    derived:
+      neutral_pass_rate: 0.4856
+      oline_ryoe: 0.4697
+      oline_z: 0.2486
+      proe_z: -0.0963
+      qb_epa_per_att: 0.0743
+      qb_tier: 3
+      target_concentration: 0.1256
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  CIN:
+    derived:
+      neutral_pass_rate: 0.573
+      oline_ryoe: 0.3273
+      oline_z: -0.0793
+      proe_z: 1.7876
+      qb_epa_per_att: -0.0983
+      qb_tier: 5
+      target_concentration: 0.1634
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  CLE:
+    derived:
+      neutral_pass_rate: 0.4596
+      oline_ryoe: 0.2841
+      oline_z: -0.1788
+      proe_z: -0.6572
+      qb_epa_per_att: -0.2797
+      qb_tier: 5
+      target_concentration: 0.1217
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  DAL:
+    derived:
+      neutral_pass_rate: 0.497
+      oline_ryoe: 0.6259
+      oline_z: 0.6085
+      proe_z: 0.1482
+      qb_epa_per_att: 0.1888
+      qb_tier: 1
+      target_concentration: 0.1418
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  DEN:
+    derived:
+      neutral_pass_rate: 0.5337
+      oline_ryoe: 0.2104
+      oline_z: -0.3486
+      proe_z: 0.9393
+      qb_epa_per_att: 0.1035
+      qb_tier: 2
+      target_concentration: 0.1262
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  DET:
+    derived:
+      neutral_pass_rate: 0.4857
+      oline_ryoe: 0.8094
+      oline_z: 1.0311
+      proe_z: -0.0941
+      qb_epa_per_att: 0.1842
+      qb_tier: 2
+      target_concentration: 0.1797
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  GB:
+    derived:
+      neutral_pass_rate: 0.4603
+      oline_ryoe: -0.0392
+      oline_z: -0.9235
+      proe_z: -0.6408
+      qb_epa_per_att: 0.252
+      qb_tier: 1
+      target_concentration: 0.0974
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  HOU:
+    derived:
+      neutral_pass_rate: 0.5093
+      oline_ryoe: 0.3509
+      oline_z: -0.025
+      proe_z: 0.414
+      qb_epa_per_att: 0.1127
+      qb_tier: 2
+      target_concentration: 0.1299
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  IND:
+    derived:
+      neutral_pass_rate: 0.5305
+      oline_ryoe: 0.5897
+      oline_z: 0.525
+      proe_z: 0.8708
+      qb_epa_per_att: 0.1699
+      qb_tier: 2
+      target_concentration: 0.155
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  JAX:
+    derived:
+      neutral_pass_rate: 0.5385
+      oline_ryoe: 0.2332
+      oline_z: -0.2961
+      proe_z: 1.0426
+      qb_epa_per_att: 0.0686
+      qb_tier: 3
+      target_concentration: 0.1388
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  KC:
+    derived:
+      neutral_pass_rate: 0.5319
+      oline_ryoe: -0.1848
+      oline_z: -1.2588
+      proe_z: 0.9006
+      qb_epa_per_att: 0.136
+      qb_tier: 2
+      target_concentration: 0.119
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  LA:
+    derived:
+      neutral_pass_rate: 0.5654
+      oline_ryoe: 0.5708
+      oline_z: 0.4815
+      proe_z: 1.6224
+      qb_epa_per_att: 0.252
+      qb_tier: 1
+      target_concentration: 0.1521
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  LAC:
+    derived:
+      neutral_pass_rate: 0.5323
+      oline_ryoe: 0.6071
+      oline_z: 0.5651
+      proe_z: 0.9104
+      qb_epa_per_att: 0.0315
+      qb_tier: 3
+      target_concentration: 0.1421
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  LV:
+    derived:
+      neutral_pass_rate: 0.4975
+      oline_ryoe: -0.169
+      oline_z: -1.2226
+      proe_z: 0.1607
+      qb_epa_per_att: -0.1628
+      qb_tier: 5
+      target_concentration: 0.1168
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  MIA:
+    derived:
+      neutral_pass_rate: 0.4711
+      oline_ryoe: 0.7984
+      oline_z: 1.0059
+      proe_z: -0.4091
+      qb_epa_per_att: 0.0375
+      qb_tier: 3
+      target_concentration: 0.1217
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  MIN:
+    derived:
+      neutral_pass_rate: 0.4869
+      oline_ryoe: 0.4411
+      oline_z: 0.1828
+      proe_z: -0.0678
+      qb_epa_per_att: -0.2227
+      qb_tier: 5
+      target_concentration: 0.164
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  NE:
+    derived:
+      neutral_pass_rate: 0.5027
+      oline_ryoe: 0.8997
+      oline_z: 1.2392
+      proe_z: 0.2722
+      qb_epa_per_att: 0.3357
+      qb_tier: 1
+      target_concentration: 0.1321
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  'NO':
+    derived:
+      neutral_pass_rate: 0.4936
+      oline_ryoe: -0.419
+      oline_z: -1.7983
+      proe_z: 0.075
+      qb_epa_per_att: 0.0063
+      qb_tier: 3
+      target_concentration: 0.1247
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  NYG:
+    derived:
+      neutral_pass_rate: 0.4304
+      oline_ryoe: 0.166
+      oline_z: -0.451
+      proe_z: -1.2854
+      qb_epa_per_att: 0.0101
+      qb_tier: 3
+      target_concentration: 0.1408
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  NYJ:
+    derived:
+      neutral_pass_rate: 0.365
+      oline_ryoe: 0.5887
+      oline_z: 0.5228
+      proe_z: -2.6949
+      qb_epa_per_att: -0.1101
+      qb_tier: 5
+      target_concentration: 0.0948
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  PHI:
+    derived:
+      neutral_pass_rate: 0.4801
+      oline_ryoe: 0.2272
+      oline_z: -0.3099
+      proe_z: -0.2156
+      qb_epa_per_att: 0.0756
+      qb_tier: 3
+      target_concentration: 0.1788
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  PIT:
+    derived:
+      neutral_pass_rate: 0.5161
+      oline_ryoe: 0.8136
+      oline_z: 1.0408
+      proe_z: 0.5599
+      qb_epa_per_att: 0.0539
+      qb_tier: 3
+      target_concentration: 0.1201
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  SEA:
+    derived:
+      neutral_pass_rate: 0.4672
+      oline_ryoe: 0.366
+      oline_z: 0.0098
+      proe_z: -0.4921
+      qb_epa_per_att: 0.1563
+      qb_tier: 2
+      target_concentration: 0.2159
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  SF:
+    derived:
+      neutral_pass_rate: 0.5118
+      oline_ryoe: -0.4883
+      oline_z: -1.9581
+      proe_z: 0.4683
+      qb_epa_per_att: 0.1546
+      qb_tier: 2
+      target_concentration: 0.1285
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  TB:
+    derived:
+      neutral_pass_rate: 0.477
+      oline_ryoe: -0.3909
+      oline_z: -1.7338
+      proe_z: -0.2809
+      qb_epa_per_att: 0.0012
+      qb_tier: 3
+      target_concentration: 0.1283
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  TEN:
+    derived:
+      neutral_pass_rate: 0.4646
+      oline_ryoe: 0.4364
+      oline_z: 0.1719
+      proe_z: -0.5494
+      qb_epa_per_att: -0.202
+      qb_tier: 5
+      target_concentration: 0.1107
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
+  WAS:
+    derived:
+      neutral_pass_rate: 0.4183
+      oline_ryoe: 0.7678
+      oline_z: 0.9353
+      proe_z: -1.5476
+      qb_epa_per_att: -0.0172
+      qb_tier: 4
+      target_concentration: 0.1214
+    override:
+      note: null
+      oline_z: null
+      proe_z: null
+      qb_tier: null
+      target_concentration: null
