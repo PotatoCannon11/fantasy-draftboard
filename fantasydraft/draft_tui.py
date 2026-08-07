@@ -15,7 +15,7 @@ Draft state autosaves to output/draft_state.json after every keystroke that
 changes it, so closing the terminal mid-draft costs nothing.
 
 Keys
-  j/k ↑/↓ move      g/G top/bottom     PgUp/PgDn page
+  j/k or arrows move          g/G top/bottom   PgUp/PgDn page
   d       someone else drafted him     m  I drafted him
   u       undo last pick               x  unmark the player under the cursor
   /       search (Esc clears)          a  all positions
@@ -954,6 +954,13 @@ Point FANTASY_HOME somewhere else to keep separate leagues apart.
 
 
 def main(argv=None) -> int:
+    # Windows consoles still default to a legacy codepage; without this any
+    # non-ASCII in help text or a status line raises UnicodeEncodeError.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     ensure_dirs()   # create the data home and seed config on a fresh install
     ap = argparse.ArgumentParser(
         description=__doc__,

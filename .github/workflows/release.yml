@@ -41,6 +41,8 @@ jobs:
             asset: draftboard-windows-x86_64
             ext: ".exe"
     runs-on: ${{ matrix.os }}
+    env:
+      PYTHONIOENCODING: utf-8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -69,8 +71,7 @@ jobs:
 
       - name: Rename
         shell: bash
-        run: mv "dist/bin/draftboard${{ matrix.ext }}" \
-                "dist/bin/${{ matrix.asset }}${{ matrix.ext }}"
+        run: mv "dist/bin/draftboard${{ matrix.ext }}" "dist/bin/${{ matrix.asset }}${{ matrix.ext }}"
 
       - uses: actions/upload-artifact@v4
         with:
