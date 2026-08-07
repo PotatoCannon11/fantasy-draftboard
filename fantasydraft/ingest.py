@@ -394,9 +394,28 @@ def main(argv=None) -> int:
     if do_mkt:
         print("- market: ADP + projections")
         pull_adp(season, cfg["league"]["team_counts"])
-        pull_sleeper(season)
-        pull_espn(season)
-        pull_sharks(season)
+        # One projection feed going down must not take the pipeline with it.
+        # These are third-party sites with no contract to us - FantasySharks in
+        # particular 403s whole IP ranges - and the blend already renormalizes
+        # over whichever sources answered. A stale cached copy from the last
+        # run is far better than no board at all on draft morning.
+        alive = 0
+        for name, fn in (("sleeper", pull_sleeper), ("espn", pull_espn),
+                         ("fantasysharks", pull_sharks)):
+            try:
+                fn(season)
+                alive += 1
+            except Exception as exc:  # noqa: BLE001
+                cached = (DATA_RAW / f"proj_{name}.parquet").exists()
+                print(f"  [warn] {name} projections unavailable ({exc}); "
+                      + ("using the cached copy" if cached else "skipping"))
+                if cached:
+                    alive += 1
+        if alive < cfg["projections"]["min_sources"]:
+            raise SystemExit(
+                f"only {alive} projection source(s) available, need "
+                f"{cfg['projections']['min_sources']} - refusing to build a "
+                "board on a single source")
 
     print(f"\nmanifest -> {DATA_RAW / '_manifest.json'}")
     return 0

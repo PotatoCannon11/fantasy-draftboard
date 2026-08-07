@@ -19,6 +19,9 @@ jobs:
 
       # The dashboard tests need a board to load, so build one first. This also
       # exercises the whole ingest -> board pipeline against the live sources.
+      # Third-party feeds block datacentre IPs from time to time (FantasySharks
+      # 403s GitHub runners); the ingest degrades over that, and the run only
+      # fails if too few projection sources answer to build an honest blend.
       - name: Build a board
         run: python -m fantasydraft.run_pipeline
 

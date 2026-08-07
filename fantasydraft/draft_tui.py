@@ -955,13 +955,6 @@ Point FANTASY_HOME somewhere else to keep separate leagues apart.
 
 def main(argv=None) -> int:
     ensure_dirs()   # create the data home and seed config on a fresh install
-    board_path = DATA_PROC / "draft_board.parquet"
-    if not board_path.exists():
-        # A brand-new install has config but no data. Say what to run rather
-        # than dying in pandas with a bare FileNotFoundError.
-        print(FIRST_RUN.format(home=ROOT))
-        return 1
-    cfg = load_config()
     ap = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -976,6 +969,13 @@ def main(argv=None) -> int:
     ap.add_argument("--interval", type=float, default=5.0,
                     help="seconds between Sleeper polls (default 5)")
     args = ap.parse_args(argv)
+
+    # Checked AFTER parsing so --help and --version still work on a machine
+    # that has never pulled any data.
+    if not (DATA_PROC / "draft_board.parquet").exists():
+        print(FIRST_RUN.format(home=ROOT))
+        return 1
+    cfg = load_config()
 
     if args.reset and STATE_PATH.exists():
         STATE_PATH.unlink()
