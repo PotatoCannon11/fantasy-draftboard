@@ -23,6 +23,7 @@ Keys
   Enter   jump to the recommended player
   c       add/remove from compare      C  compare view
   o       override the pick count      ,  setup / config
+  S       sources: what was pulled, when, and re-pull it
   R       reload board + news from disk
   F       fetch fresh data (news / market / everything)
   ?       help                         q  quit
@@ -355,6 +356,130 @@ FETCH_MODES = [
 ]
 
 
+# Which fetch mode re-pulls each dataset, so the Sources screen can say what to
+# press to make a given row fresh. Keyed by manifest entry.
+SOURCE_GROUP = {
+    "adp": "m", "proj_sleeper": "m", "proj_espn": "m", "proj_fantasysharks": "m",
+    "news_auto": "n",
+}
+
+
+def manifest_rows() -> list[dict]:
+    """The provenance record, with ages worked out. `data/raw/_manifest.json`
+    stores the URL, row count and UTC pull time of every dataset; without this
+    the dashboard can tell you data *changed* but never that it is *old*."""
+    from datetime import datetime, timezone
+
+    from common import read_manifest
+    now = datetime.now(timezone.utc)
+    out = []
+    for key, meta in sorted(read_manifest().items()):
+        pulled = meta.get("pulled_at") or ""
+        age = None
+        try:
+            age = (now - datetime.fromisoformat(pulled)).total_seconds() / 86400
+        except ValueError:
+            pass
+        out.append({
+            "key": key,
+            "rows": meta.get("rows"),
+            "pulled": pulled,
+            "age_days": age,
+            "url": (meta.get("url") or "").split(";")[0].strip(),
+            "group": SOURCE_GROUP.get(key, "s"),
+        })
+    return out
+
+
+def _age_label(age: float | None) -> str:
+    if age is None:
+        return "?"
+    if age < 1 / 24:
+        return f"{age * 1440:.0f}m ago"
+    if age < 1:
+        return f"{age * 24:.0f}h ago"
+    return f"{age:.1f}d ago"
+
+
+class SourcesScreen(ModalScreen):
+    """Where every number on the board came from, and how old it is."""
+
+    BINDINGS = [
+        Binding("escape,q,S", "dismiss", "close"),
+        Binding("r", "refresh('a')", "refresh all"),
+        Binding("m", "refresh('m')", "market"),
+        Binding("s", "refresh('s')", "stats"),
+        Binding("n", "refresh('n')", "news"),
+    ]
+
+    def __init__(self, app_ref):
+        super().__init__()
+        self.app_ref = app_ref
+
+    def compose(self) -> ComposeResult:
+        with Vertical(id="srcbox"):
+            yield Static("", id="srchead")
+            yield DataTable(id="src", cursor_type="row", zebra_stripes=True)
+            yield Static("", id="srcfoot")
+
+    def on_mount(self) -> None:
+        t = self.query_one("#src", DataTable)
+        t.add_column("Dataset", width=22)
+        t.add_column("Rows", width=9)
+        t.add_column("Pulled", width=11)
+        t.add_column("Source", width=52)
+        self.redraw()
+        t.focus()
+        self.set_interval(2.0, self.redraw)
+
+    def redraw(self) -> None:
+        t = self.query_one("#src", DataTable)
+        keep = t.cursor_row or 0
+        t.clear()
+        limit = float(self.app_ref.cfg["output"].get("stale_after_days", 3))
+        rows = manifest_rows()
+        for r in rows:
+            age = r["age_days"]
+            lab = _age_label(age)
+            if age is None:
+                cell = f"[dim]{lab}[/]"
+            elif age > limit * 3:
+                cell = f"[bold red]{lab}[/]"
+            elif age > limit:
+                cell = f"[yellow]{lab}[/]"
+            else:
+                cell = f"[green]{lab}[/]"
+            t.add_row(r["key"], f"{r['rows']:,}" if r["rows"] else "-", cell,
+                      r["url"][:50] or "-")
+        t.move_cursor(row=min(keep, max(0, len(rows) - 1)))
+
+        oldest = max((r["age_days"] for r in rows
+                      if r["age_days"] is not None), default=None)
+        head = ("[bold]Sources[/]   every dataset behind the board, and when it "
+                "was pulled\n")
+        head += (f"data home: {ROOT}\n" if ROOT else "")
+        if oldest is not None:
+            head += f"oldest pull: {_age_label(oldest)}   "
+        head += f"(anything over {limit:g}d is flagged)"
+        self.query_one("#srchead", Static).update(head)
+
+        if self.app_ref.fetching:
+            foot = f"[yellow]fetching {self.app_ref.fetching}… this screen " \
+                   "updates when it lands[/]"
+        else:
+            foot = ("[bold]r[/] re-pull everything   [bold]m[/] market "
+                    "(ADP + projections)   [bold]s[/] statistics   "
+                    "[bold]n[/] news   [bold]Esc[/] back")
+        self.query_one("#srcfoot", Static).update(foot)
+
+    def action_refresh(self, key: str) -> None:
+        argv = dict((k, a) for k, _l, _d, a in FETCH_MODES).get(key)
+        if argv and not self.app_ref.fetching:
+            self.app_ref.run_worker(self.app_ref.run_fetch(argv),
+                                    exclusive=False)
+            self.redraw()
+
+
 class FetchScreen(ModalScreen):
     """Pick what to re-fetch from the upstream datasets."""
 
@@ -406,6 +531,11 @@ class DraftApp(App):
     #cfghead { height: auto; padding-bottom: 1; }
     #cfgfoot { height: auto; padding-top: 1; }
     #cfg { height: auto; max-height: 26; }
+    #srcbox { width: 104; height: auto; max-height: 90%; padding: 1 2;
+              background: $surface; border: round $accent; }
+    #srchead { height: auto; padding-bottom: 1; }
+    #srcfoot { height: auto; padding-top: 1; }
+    #src { height: auto; max-height: 24; }
     """
 
     BINDINGS = [
@@ -429,6 +559,7 @@ class DraftApp(App):
         Binding("comma", "config", "setup"),
         Binding("R", "reload_data", "reload"),
         Binding("F", "fetch", "fetch"),
+        Binding("S", "sources", "sources"),
         Binding("question_mark", "help", "help"),
         Binding("q", "quit", "quit"),
         *[Binding(k, f"filter('{p}')", p, show=False)
@@ -510,6 +641,18 @@ class DraftApp(App):
             msg += f"; {len(lost)} pick(s) no longer on the board: " \
                    + ", ".join(lost[:3])
         return msg
+
+    def stale_sources(self) -> str:
+        """Age of the market feeds, which are the ones that actually move week
+        to week. Statistics going a few days stale in-season is harmless; ADP
+        three days old on draft night quietly poisons the Value column."""
+        limit = float(self.cfg["output"].get("stale_after_days", 3))
+        worst, key = 0.0, None
+        for r in manifest_rows():
+            if r["group"] == "m" and r["age_days"] and r["age_days"] > limit:
+                if r["age_days"] > worst:
+                    worst, key = r["age_days"], r["key"]
+        return f"{key} pulled {_age_label(worst)}" if key else ""
 
     def check_sources(self) -> None:
         """Notice when the data changes underneath us, so the dashboard can
@@ -752,6 +895,8 @@ class DraftApp(App):
                + "VONA·run    " + "  ".join(line2))
         if self.fetching:
             out += f"\n[yellow]fetching {self.fetching}… board still usable[/]"
+        elif (stale_src := self.stale_sources()):
+            out += (f"\n[bold yellow]{stale_src} — press S for sources[/]")
         elif self.stale:
             out += ("\n[bold yellow]data on disk changed — press R to "
                     "reload[/]")
@@ -909,6 +1054,9 @@ class DraftApp(App):
     def action_reload_data(self) -> None:
         self.fetch_msg = f"[green]{self.reload_data()}[/]"
         self.refresh_panels()
+
+    def action_sources(self) -> None:
+        self.push_screen(SourcesScreen(self))
 
     def action_fetch(self) -> None:
         def go(argv: list[str] | None) -> None:

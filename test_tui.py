@@ -234,7 +234,93 @@ async def run() -> None:
     check("--reset starts clean", len(app3.st.order) == 0)
 
     await reload_checks()
+    await sources_checks()
     await sleeper_checks()
+
+
+async def sources_checks() -> None:
+    """Provenance must be visible and re-pullable from inside the dashboard."""
+    print("\n=== sources / provenance ===")
+    cfg = load_config()
+    if T.STATE_PATH.exists():
+        T.STATE_PATH.unlink()
+    app = T.DraftApp(cfg, reset=True)
+    async with app.run_test(size=(160, 48)) as pilot:
+        await pilot.pause()
+
+        rows = T.manifest_rows()
+        check("every pulled dataset is accounted for", len(rows) >= 15,
+              f"{len(rows)} entries")
+        check("each row carries a source URL",
+              all(r["url"] for r in rows),
+              str([r["key"] for r in rows if not r["url"]]))
+        check("each row carries an age",
+              all(r["age_days"] is not None for r in rows),
+              str([r["key"] for r in rows if r["age_days"] is None]))
+        check("the market feeds are grouped so refresh knows what to re-pull",
+              {r["group"] for r in rows if r["key"].startswith("proj_")} == {"m"},
+              str({r["key"]: r["group"] for r in rows
+                   if r["key"].startswith("proj_")}))
+        check("age labels read naturally",
+              T._age_label(0.0005) .endswith("m ago")
+              and T._age_label(0.25).endswith("h ago")
+              and T._age_label(4.0) == "4.0d ago",
+              f"{T._age_label(0.0005)} / {T._age_label(0.25)} / {T._age_label(4.0)}")
+
+        await pilot.press("S")
+        await pilot.pause()
+        check("S opens sources", isinstance(app.screen, T.SourcesScreen),
+              type(app.screen).__name__)
+        table = app.screen.query_one("#src")
+        check("sources table lists the datasets", table.row_count == len(rows),
+              f"{table.row_count} rows vs {len(rows)}")
+
+        # Refresh from inside the screen must dispatch the right pipeline call.
+        calls = []
+        real = app.run_fetch
+
+        async def spy(argv):
+            calls.append(argv)
+        app.run_fetch = spy
+        try:
+            await pilot.press("m")
+            await pilot.pause()
+            check("m from sources re-pulls the market feeds",
+                  calls and calls[-1] == ["run_pipeline.py", "--refresh", "market"],
+                  str(calls))
+            await pilot.press("s")
+            await pilot.pause()
+            check("s from sources re-pulls the statistics",
+                  calls[-1] == ["run_pipeline.py", "--refresh", "nflverse"],
+                  str(calls[-1]))
+            await pilot.press("r")
+            await pilot.pause()
+            check("r from sources re-pulls everything",
+                  calls[-1] == ["run_pipeline.py"], str(calls[-1]))
+        finally:
+            app.run_fetch = real
+        await pilot.press("escape")
+        await pilot.pause()
+        check("escape closes sources",
+              not isinstance(app.screen, T.SourcesScreen))
+
+        # Staleness: fresh data must not nag, old market data must.
+        check("fresh market data raises no warning", app.stale_sources() == "",
+              app.stale_sources())
+        real_rows = T.manifest_rows
+        T.manifest_rows = lambda: [
+            {"key": "adp", "rows": 1, "pulled": "", "age_days": 9.0,
+             "url": "u", "group": "m"}]
+        try:
+            msg = app.stale_sources()
+            check("stale ADP is called out by name", "adp" in msg, msg)
+            check("and surfaced on the main status line",
+                  "press S for sources" in app.scarcity_text(),
+                  app.scarcity_text().splitlines()[-1])
+        finally:
+            T.manifest_rows = real_rows
+    if T.STATE_PATH.exists():
+        T.STATE_PATH.unlink()
 
 
 async def reload_checks() -> None:
