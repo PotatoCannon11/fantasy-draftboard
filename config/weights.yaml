@@ -109,6 +109,21 @@ variance:
   band_z: 1.0
 vbd:
   method: adp_demand
+  # Shrink each player's VBD toward what the market implies he is worth, in the
+  # model's own value units (see tiering.blend_market). 0 = pure model,
+  # 1 = just ADP with extra steps.
+  #
+  # Why not 0: cross-position VBD hinges on a replacement level that is itself
+  # an estimate, and the resulting gaps are routinely smaller than a single
+  # projection's standard error - Josh Allen and Marvin Harrison sat 9 ranks
+  # apart on a 7-point VBD gap with sigmas of 79 and 68. At 0.25 the mean
+  # disagreement with ADP falls 20.3 -> 15.1 picks and the WORST disagreement
+  # falls 223 -> 144, which is the part that matters: the tail is where one
+  # bad replacement estimate or one thin projection does real damage.
+  #
+  # Why not higher: this damps the divergence the board exists to find. Every
+  # step toward the consensus buys safety by selling edge.
+  market_blend: 0.25
   roster_size: 15
   streaming_allowance:
     QB: 0.5

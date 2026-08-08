@@ -9,7 +9,9 @@ import pandas as pd
 
 from common import DATA_PROC, DATA_RAW, ensure_dirs, load_config, norm_pos, norm_team
 from idmap import IdResolver, resolve_frame
-from tiering import add_tiers, add_vbd, resolve_replacement
+from tiering import (
+    add_tiers, add_vbd, blend_market, finalize_ranks, resolve_replacement,
+)
 from variance import add_variance
 
 
@@ -89,13 +91,25 @@ def build(cfg: dict) -> pd.DataFrame:
 
     df = add_variance(df, cfg)
     df = add_vbd(df, cfg, adp_raw)
-    df = add_tiers(df, cfg)
 
     adp = load_adp(resolver)
     if not adp.empty:
         df = df.merge(adp, on="player_uid", how="left")
         matched = df[f"adp_{cfg['output']['adp_teams']}"].notna().sum()
         print(f"  ADP matched       {matched:>5} players")
+
+    # Shrink toward the market, then rebuild ranks and cut tiers from the
+    # blended score - ordering, tiers and VONA all have to share one currency.
+    w = float(cfg["vbd"].get("market_blend", 0.0) or 0.0)
+    if w > 0:
+        df = blend_market(df, cfg)
+        df = finalize_ranks(df, cfg)
+        moved = (df["vbd_score"] - df[f"vbd_model_{cfg['league']['primary_team_count']}"]).abs()
+        print(f"  market blend      w={w:.2f}, mean shift "
+              f"{moved.mean():.1f} VBD pts")
+    else:
+        df = blend_market(df, cfg)
+    df = add_tiers(df, cfg)
 
     inj = load_injuries(resolver)
     if not inj.empty:

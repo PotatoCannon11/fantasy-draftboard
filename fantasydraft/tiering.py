@@ -15,7 +15,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from common import FANTASY_POS
+from common import FANTASY_POS, norm_pos
 
 
 # ---------------------------------------------------------------------------
@@ -39,7 +39,11 @@ def replacement_ranks_from_adp(cfg: dict, n_teams: int,
 
     picks = n_teams * cfg["vbd"].get("roster_size", 15)
     taken = g.sort_values("adp").head(picks)
-    counts = taken["position"].value_counts()
+    # The ADP feed labels kickers "PK", not "K". board.py normalizes before
+    # calling this, but normalizing here too makes the function correct on its
+    # own - called with a raw feed it would otherwise count zero kickers and
+    # fall back to the min_rank floor, which looks exactly like a measurement.
+    counts = taken["position"].map(norm_pos).value_counts()
     floors = cfg["vbd"].get("min_rank", {})
 
     ranks = {}
@@ -77,6 +81,51 @@ def resolve_replacement(cfg: dict, n_teams: int,
     return replacement_ranks(cfg, n_teams), "static"
 
 
+def blend_market(out: pd.DataFrame, cfg: dict) -> pd.DataFrame:
+    """Shrink each player's VBD toward what the market implies he is worth.
+
+    The market's ordering is expressed in the model's own value units: a player
+    the room drafts 27th is credited with the VBD the model assigns to its own
+    27th-best player. Blending those two numbers keeps one currency, so VONA,
+    tiers and ordering all stay consistent, while `vbd_model_*` preserves the
+    unshrunk figure so you can always see how far the board has been pulled.
+
+    Why do this at all: cross-position VBD comparisons hinge on a replacement
+    level that is itself an estimate, and the resulting gaps are routinely
+    smaller than a projection's own standard error. Shrinking toward the
+    consensus keeps the board's disagreements where the evidence is strong and
+    damps the ones that are an artefact of a knob. It also, unavoidably, damps
+    the edge this board exists to find - hence a knob, not a constant.
+
+    Players with no ADP are left alone: the market has no opinion to shrink to.
+    """
+    w = float(cfg["vbd"].get("market_blend", 0.0) or 0.0)
+    for n_teams in cfg["league"]["team_counts"]:
+        out[f"vbd_model_{n_teams}"] = out[f"vbd_{n_teams}"]
+    if w <= 0:
+        return out
+
+    for n_teams in cfg["league"]["team_counts"]:
+        col, acol = f"vbd_{n_teams}", f"adp_{n_teams}"
+        if acol not in out.columns:
+            continue
+        model = pd.to_numeric(out[col], errors="coerce")
+        a = pd.to_numeric(out[acol], errors="coerce")
+        # The model's value curve, indexed by overall rank.
+        curve = model.dropna().sort_values(ascending=False).to_numpy()
+        if len(curve) == 0:
+            continue
+        idx = (a - 1).clip(0, len(curve) - 1)
+        implied = pd.Series(np.nan, index=out.index, dtype=float)
+        ok = a.notna() & model.notna()
+        lo = np.floor(idx[ok]).astype(int)
+        hi = np.ceil(idx[ok]).astype(int)
+        frac = (idx[ok] - lo).to_numpy()
+        implied.loc[ok] = curve[lo] * (1 - frac) + curve[hi] * frac
+        out.loc[ok, col] = (1 - w) * model[ok] + w * implied[ok]
+    return out
+
+
 def add_vbd(df: pd.DataFrame, cfg: dict,
             adp: pd.DataFrame | None = None) -> pd.DataFrame:
     out = df.copy()
@@ -98,6 +147,13 @@ def add_vbd(df: pd.DataFrame, cfg: dict,
             out.loc[mask, col] = out.loc[mask, "final_projection"] - baseline
             out.loc[mask, f"replacement_{n_teams}"] = baseline
 
+    return finalize_ranks(out, cfg)
+
+
+def finalize_ranks(out: pd.DataFrame, cfg: dict) -> pd.DataFrame:
+    """Derive every ordering column from vbd_score. Split out because the
+    market blend can only run once ADP has been merged, and the ranks have to
+    be rebuilt from the blended score afterwards."""
     primary = cfg["league"]["primary_team_count"]
     out["vbd_score"] = out[f"vbd_{primary}"]
     out["overall_rank"] = out["vbd_score"].rank(ascending=False, method="min")
